@@ -19,3 +19,5 @@ export interface Proyecto {
   tarjeta_titulo?: string;
   id_tecnica?: string | number;
 }
+
+export interface ArtistaPerfil extends Artista {}

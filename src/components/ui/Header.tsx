@@ -6,7 +6,7 @@ interface HeaderProps {
 
 export function Header({ activeTab = 'comunidad' }: HeaderProps) {
   return (
-    <header className="bg-'#F2D8BD' border-b-2 sticky top-0 z-50" style={{ borderBottomColor: '#D1924F' }}>
+    <header className="border-b-2 sticky top-0 z-50" style={{ backgroundColor: '#FEF7F3', borderBottomColor: '#D1924F' }}>
       <div className="w-full px-6 py-4 flex items-center justify-between">
 
         <span className="text-2xl font-bold" style={{ color: '#D1924F', fontFamily: 'var(--font-playfair)' }}>

@@ -36,7 +36,7 @@ export function ArtistCard({ artist, proyectos = [] }: ArtistCardProps) {
           className="rounded-2xl px-4 py-3 flex flex-wrap gap-2 justify-start items-center"
           style={{ backgroundColor: '#D1924F', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.15)' }}
         >
-          <span className="text-white text-ls font-semibold w-full text-left mb-2">PROYECTOS</span>
+          <span className="text-white text-ls font-semibold w-full text-left mb-2">TECNICAS</span>
           {proyectos && proyectos.length > 0 ? (
             proyectos.map((proyecto, index) => (
               <span
@@ -49,7 +49,7 @@ export function ArtistCard({ artist, proyectos = [] }: ArtistCardProps) {
             ))
           ) : (
             <span className="text-white text-sm px-3 py-1" style={{ opacity: 0.7 }}>
-              Este artista aún no cuenta con proyectos registrados
+              Este artista aún no cuenta con tecnicas registradas
             </span>
           )}
         </div>

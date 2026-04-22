@@ -5,3 +5,4 @@ export interface ApiResponse<T> {
 }
 
 export * from './artistas';
+export * from './tecnicas';
