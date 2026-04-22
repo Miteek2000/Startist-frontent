@@ -17,3 +17,19 @@ export interface TecnicaArbol {
 }
 
 export interface ArbolTecnicas extends Array<TecnicaArbol> {}
+
+export interface TecnicaDetalle {
+  id_tecnica: string | number;
+  nombre: string;
+  descripcion: string;
+  estado: boolean;
+  tecnica_padre_id?: string | number | null;
+}
+
+export interface ObraReferencia {
+  id: string | number;
+  titulo: string;
+  artista: string;
+  imagen: string;
+  url?: string;
+}
