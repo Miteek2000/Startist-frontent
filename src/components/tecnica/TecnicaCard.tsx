@@ -65,18 +65,7 @@ export function TecnicaCard({ tecnica, currentIndex, totalCards, onNext, onPrevi
         </p>
 
         <div className="flex gap-4 mb-8">
-          <button
-            className="px-8 py-3 rounded-full text-white font-semibold text-sm transition-all hover:shadow-md flex items-center gap-2"
-            style={{ backgroundColor: '#D1924F' }}
-          >
-            <Image 
-              src="/CambiarCarta.png" 
-              alt="Iniciar" 
-              width={20} 
-              height={20}
-            />
-            Iniciar Técnica
-          </button>
+
           <button
             onClick={() => setIsModalOpen(true)}
             className="px-8 py-3 rounded-full font-semibold text-sm transition-all hover:shadow-md border-2 flex items-center gap-2"
