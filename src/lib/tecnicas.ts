@@ -94,34 +94,31 @@ export async function getGaleriaByTecnica(tecnicaId: string | number, limit: num
     return [];
   }
 }
-
 export async function subirProyecto(
   titulo: string,
-  archivoUrl: string,
+  archivo: File,    
   descripcion: string,
   tarjeta_id: string | number
 ): Promise<boolean> {
   try {
+    const formData = new FormData()
+    formData.append('titulo', titulo)
+    formData.append('archivo', archivo)     
+    formData.append('descripcion', descripcion)
+    formData.append('tarjeta_id', String(tarjeta_id))
+
     const response = await fetch('/api/proyectos', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        titulo,
-        archivo: archivoUrl,
-        descripcion,
-        tarjeta_id,
-      }),
-    });
+      body: formData,
+    })
 
     if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
+      throw new Error(`API error: ${response.status}`)
     }
 
-    return true;
+    return true
   } catch (error) {
-    console.error('Error in subirProyecto:', error);
-    throw error;
+    console.error('Error in subirProyecto:', error)
+    throw error
   }
 }

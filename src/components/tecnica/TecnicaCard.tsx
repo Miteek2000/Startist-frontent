@@ -16,25 +16,16 @@ interface TecnicaCardProps {
 export function TecnicaCard({ tecnica, currentIndex, totalCards, onNext, onPrevious }: TecnicaCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleUploadSubmit = async (archivo: File, descripcion: string, titulo: string) => {
-    try {
-
-      const archivoUrl = URL.createObjectURL(archivo);
-      
-      await subirProyecto(
-        titulo,
-        archivoUrl,
-        descripcion,
-        tecnica.id_tarjeta
-      );
-      
-      setIsModalOpen(false);
-      alert('Proyecto subido exitosamente');
-    } catch (error) {
-      console.error('Error al subir proyecto:', error);
-      alert('Error al subir el proyecto');
-    }
-  };
+const handleUploadSubmit = async (archivo: File, descripcion: string, titulo: string) => {
+  try {
+    await subirProyecto(titulo, archivo, descripcion, tecnica.id_tarjeta)
+    setIsModalOpen(false)
+    alert('Proyecto subido exitosamente')
+  } catch (error) {
+    console.error('Error al subir proyecto:', error)
+    alert('Error al subir el proyecto')
+  }
+}
   return (
     <div className="relative flex items-center justify-center min-h-screen">
 
