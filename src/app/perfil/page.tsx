@@ -17,6 +17,7 @@ export default function PerfilPage() {
   const [tecnicas, setTecnicas] = useState<TecnicaArbol[]>([]);
   const [proyectos, setProyectos] = useState<any[]>([]);
   const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (!token || !user) {
@@ -31,7 +32,13 @@ export default function PerfilPage() {
           'Authorization': `Bearer ${token}`,
         };
 
-        const artistaId = user.id;
+        const artistaId = user.id_artista ?? user.id;
+
+        if (!artistaId) {
+          setError('No se pudo determinar el ID del artista. Cierra sesión y vuelve a entrar.');
+          setCargando(false);
+          return;
+        }
 
         const [resArtista, resTecnicas, resProyectos] = await Promise.all([
           fetch(`${process.env.NEXT_PUBLIC_API_URL}/artistas/${artistaId}`, { headers }),
@@ -42,6 +49,8 @@ export default function PerfilPage() {
         if (resArtista.ok) {
           const data = await resArtista.json();
           setArtista(data.data || data);
+        } else {
+          setError(`Error al cargar el artista (${resArtista.status})`);
         }
 
         if (resTecnicas.ok) {
@@ -53,8 +62,9 @@ export default function PerfilPage() {
           const data = await resProyectos.json();
           setProyectos(Array.isArray(data) ? data : data.data || []);
         }
-      } catch (error) {
-        console.error('Error cargando perfil:', error);
+      } catch (err) {
+        console.error('Error cargando perfil:', err);
+        setError('Error de conexión con el servidor');
       } finally {
         setCargando(false);
       }
@@ -71,12 +81,19 @@ export default function PerfilPage() {
     );
   }
 
-  if (!artista) {
+  if (error || !artista) {
     return (
       <div style={{ backgroundColor: '#FEF7F3' }} className="min-h-screen">
         <Header activeTab="perfil" />
         <main className="max-w-7xl mx-auto px-6 py-12 text-center">
-          <p className="text-gray-500 text-lg">No se encontró el artista</p>
+          <p className="text-gray-500 text-lg">{error || 'No se encontró el artista'}</p>
+          <button
+            onClick={() => router.push('/login')}
+            className="mt-4 px-6 py-2 rounded-full text-white font-semibold"
+            style={{ backgroundColor: '#D1924F' }}
+          >
+            Volver al login
+          </button>
         </main>
       </div>
     );
