@@ -26,12 +26,12 @@ export async function getArtistas(): Promise<Artista[]> {
 
     const data = await response.json();
     
-    // El API devuelve un array directamente
+
     if (Array.isArray(data)) {
       return data;
     }
     
-    // Si devuelve un objeto con data
+
     return data.data || [];
   } catch (error) {
     console.error('Error in getArtistas:', error);
