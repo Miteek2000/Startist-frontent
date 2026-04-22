@@ -56,7 +56,7 @@ export default function LoginPage() {
               <input
                 type="text"
                 required
-                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-black focus:border-black transition-all outline-none"
+                className="w-full px-4 py-3 rounded-xl border border-gray-500 text-gray-900 focus:ring-2 focus:ring-black focus:border-black transition-all outline-none placeholder-gray-500"
                 placeholder="Tu usuario"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -70,8 +70,8 @@ export default function LoginPage() {
               <input
                 type="password"
                 required
-                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-black focus:border-black transition-all outline-none"
-                placeholder="••••••••"
+                className="w-full px-4 py-3 rounded-xl border border-gray-500 text-gray-700 focus:ring-2 focus:ring-black focus:border-black transition-all outline-none placeholder-gray-500"
+                placeholder="••••••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -89,7 +89,7 @@ export default function LoginPage() {
       </div>
 
       <div className="hidden lg:block lg:w-1/2 relative">
-        <img src="/EjemploProyecto.png" alt="Startist Login" className="absolute inset-0 w-full h-full object-cover" />
+        <img src="/login_welcome_photo.jpg" alt="Startist Login" className="absolute inset-0 w-full h-full object-cover" />
       </div>
     </div>
   );

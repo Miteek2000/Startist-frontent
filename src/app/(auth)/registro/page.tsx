@@ -64,7 +64,7 @@ export default function RegistroPage() {
               <input
                 type="text"
                 required
-                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-black focus:border-black transition-all outline-none"
+                className="w-full px-4 py-3 rounded-xl border border-gray-500 text-gray-900 focus:ring-2 focus:ring-black focus:border-black transition-all outline-none placeholder-gray-500"
                 placeholder="Ej. ArtistaPro"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -76,7 +76,7 @@ export default function RegistroPage() {
               <textarea
                 required
                 rows={3}
-                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-black focus:border-black transition-all outline-none resize-none"
+                className="w-full px-4 py-3 rounded-xl border border-gray-500 text-gray-900 focus:ring-2 focus:ring-black focus:border-black transition-all outline-none resize-none placeholder-gray-500"
                 placeholder="Cuéntanos sobre tu estilo..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -89,8 +89,8 @@ export default function RegistroPage() {
                 <input
                   type="password"
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-black focus:border-black transition-all outline-none"
-                  placeholder="••••••••"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-500 text-gray-900 focus:ring-2 focus:ring-black focus:border-black transition-all outline-none placeholder-gray-500"
+                  placeholder="••••••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -100,8 +100,8 @@ export default function RegistroPage() {
                 <input
                   type="password"
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-black focus:border-black transition-all outline-none"
-                  placeholder="••••••••"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-500 text-gray-900 focus:ring-2 focus:ring-black focus:border-black transition-all outline-none placeholder-gray-500"
+                  placeholder="••••••••••••"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
@@ -120,7 +120,7 @@ export default function RegistroPage() {
       </div>
 
       <div className="hidden lg:block lg:w-1/2 relative">
-        <img src="/EjemploProyecto.png" alt="Startist Art" className="absolute inset-0 w-full h-full object-cover" />
+        <img src="/login_welcome_photo.jpg" alt="Startist Art" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-black/10"></div>
       </div>
     </div>
