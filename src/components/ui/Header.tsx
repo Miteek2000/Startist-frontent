@@ -29,7 +29,7 @@ export function Header({ activeTab = 'comunidad' }: HeaderProps) {
             COMUNIDAD
           </Link>
           <Link
-            href="/mapa-tecnicas"
+            href="/dashboard"
             className={`text-sm font-medium transition-colors ${
               activeTab === 'mapa-tecnicas'
                 ? 'text-orange-400'
@@ -39,7 +39,7 @@ export function Header({ activeTab = 'comunidad' }: HeaderProps) {
               color: activeTab === 'mapa-tecnicas' ? '#D1924F' : '#5D5B5F',
             }}
           >
-            MAPA DE TECNICAS
+            MAPA DE TÉCNICAS
           </Link>
         </nav>
 
