@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { SubirArchivoModal } from './SubirArchivoModal';
-import { subirProyecto } from '@/lib/tecnicas';
+import { useAuth } from '@/context/AuthContext';
 
 interface TecnicaCardProps {
   tecnica: any;
@@ -15,47 +15,52 @@ interface TecnicaCardProps {
 
 export function TecnicaCard({ tecnica, currentIndex, totalCards, onNext, onPrevious }: TecnicaCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { token } = useAuth();
 
   const handleUploadSubmit = async (archivo: File, descripcion: string, titulo: string) => {
-    try {
+    if (!token) throw new Error('No autenticado');
 
-      const archivoUrl = URL.createObjectURL(archivo);
-      
-      await subirProyecto(
-        titulo,
-        archivoUrl,
-        descripcion,
-        tecnica.id_tarjeta
-      );
-      
-      setIsModalOpen(false);
-      alert('Proyecto subido exitosamente');
-    } catch (error) {
-      console.error('Error al subir proyecto:', error);
-      alert('Error al subir el proyecto');
+    const formData = new FormData();
+    formData.append('titulo', titulo);
+    formData.append('descripcion', descripcion);
+    formData.append('tarjeta_id', String(tecnica.id_tarjeta));
+    formData.append('archivo', archivo);
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/proyectos`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error || `Error ${response.status}`);
     }
+
+    setIsModalOpen(false);
+    alert('¡Proyecto subido exitosamente! 🎨');
   };
+
   return (
     <div className="relative flex items-center justify-center min-h-screen">
-
+      {/* Decoración de fondo */}
       <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/4 opacity-40 pointer-events-none">
         <div className="relative w-80 h-96">
-
           <div className="absolute inset-0 bg-gray-400 transform -rotate-12 rounded-lg"></div>
           <div className="absolute inset-0 bg-amber-400 transform -rotate-6 rounded-lg translate-x-4"></div>
           <div className="absolute inset-0 bg-white transform rotate-2 rounded-lg translate-x-8"></div>
         </div>
       </div>
 
-
-      <div 
+      <div
         className="relative bg-white rounded-3xl p-10 max-w-2xl w-full shadow-2xl z-10"
         style={{ boxShadow: '-4px 4px 12px rgba(0, 0, 0, 0.1)' }}
       >
-
-        <h1 
+        <h1
           className="text-4xl font-bold mb-6 pr-12"
-          style={{ fontFamily: 'var(--font-playfair)', color: '#333' }}
+          style={{ color: '#333' }}
         >
           {tecnica.nombre}
         </h1>
@@ -65,18 +70,12 @@ export function TecnicaCard({ tecnica, currentIndex, totalCards, onNext, onPrevi
         </p>
 
         <div className="flex gap-4 mb-8">
-
           <button
             onClick={() => setIsModalOpen(true)}
             className="px-8 py-3 rounded-full font-semibold text-sm transition-all hover:shadow-md border-2 flex items-center gap-2"
             style={{ borderColor: '#D1924F', color: '#D1924F' }}
           >
-            <Image 
-              src="/SubirProyecto.png" 
-              alt="Subir" 
-              width={20} 
-              height={20}
-            />
+            <Image src="/SubirProyecto.png" alt="Subir" width={20} height={20} />
             Subir Archivo
           </button>
         </div>
@@ -92,7 +91,6 @@ export function TecnicaCard({ tecnica, currentIndex, totalCards, onNext, onPrevi
               disabled={currentIndex === 0}
               className="p-2 rounded-full transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-md"
               style={{ backgroundColor: currentIndex === 0 ? '#E8E8E8' : '#D1924F', color: 'white' }}
-              title="Tarjeta anterior"
             >
               ◀
             </button>
@@ -101,7 +99,6 @@ export function TecnicaCard({ tecnica, currentIndex, totalCards, onNext, onPrevi
               disabled={currentIndex === totalCards - 1}
               className="p-2 rounded-full transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-md"
               style={{ backgroundColor: currentIndex === totalCards - 1 ? '#E8E8E8' : '#D1924F', color: 'white' }}
-              title="Siguiente tarjeta"
             >
               ▶
             </button>
@@ -109,7 +106,7 @@ export function TecnicaCard({ tecnica, currentIndex, totalCards, onNext, onPrevi
         </div>
       </div>
 
-      <SubirArchivoModal 
+      <SubirArchivoModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleUploadSubmit}
