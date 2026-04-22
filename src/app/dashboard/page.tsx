@@ -1,33 +1,94 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Header } from '@/components/ui'; // Reutilizando el componente de Mayte
+import { Header } from '@/components/ui/Header';
 import { TecnicaNodo } from '@/types/arbol';
+import { useAuth } from '@/context/AuthContext'; // <-- Importamos el contexto
 
 export default function DashboardPage() {
   const [nodos, setNodos] = useState<TecnicaNodo[]>([]);
   const [tecnicaSeleccionada, setTecnicaSeleccionada] = useState<TecnicaNodo | null>(null);
+  const [cargando, setCargando] = useState(true);
+
+  // Obtenemos el token y el router
+  const { token } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
-    // Datos simulados con el flujo exacto de tu diseño y coordenadas precisas
-    const mockData: TecnicaNodo[] = [
-      // Nivel 1
-      { id: 1, nombre: 'Grafito', descripcion: 'La técnica base por excelencia. Aprende a dominar los trazos, las sombras y los volúmenes usando lápices de diferentes durezas.', imagen_url: '/EjemploProyecto.png', desbloqueada: true, completada: true, posicion_x: 50, posicion_y: 10, dependencias: [] },
-      // Nivel 2
-      { id: 2, nombre: 'Carboncillo', descripcion: 'Sombreado intenso y difuminados dramáticos. Ideal para retratos y alto contraste.', imagen_url: '/EjemploProyecto.png', desbloqueada: true, completada: false, posicion_x: 30, posicion_y: 35, dependencias: [1] },
-      { id: 3, nombre: 'Acuarela', descripcion: 'Pintura basada en agua. Domina la transparencia, los lavados y el control de la humedad.', imagen_url: '/EjemploProyecto.png', desbloqueada: true, completada: false, posicion_x: 70, posicion_y: 35, dependencias: [1] },
-      // Nivel 3
-      { id: 4, nombre: 'Grabado', descripcion: 'Técnicas de impresión como linóleo o punta seca. Requiere precisión y paciencia.', imagen_url: '/EjemploProyecto.png', desbloqueada: false, completada: false, posicion_x: 30, posicion_y: 65, dependencias: [2] },
-      { id: 5, nombre: 'Óleo', descripcion: 'Pintura de secado lento y colores vibrantes. Perfecta para mezclas suaves y texturas.', imagen_url: '/EjemploProyecto.png', desbloqueada: false, completada: false, posicion_x: 60, posicion_y: 65, dependencias: [3] },
-      { id: 6, nombre: 'Acrílico', descripcion: 'Pintura de secado rápido. Versátil y vibrante, ideal para múltiples capas.', imagen_url: '/EjemploProyecto.png', desbloqueada: false, completada: false, posicion_x: 80, posicion_y: 65, dependencias: [3] },
-      // Nivel 4
-      { id: 7, nombre: 'Escultura', descripcion: 'Modelado en 3D utilizando arcilla, yeso u otros materiales para dar vida a tus ideas.', imagen_url: '/EjemploProyecto.png', desbloqueada: false, completada: false, posicion_x: 30, posicion_y: 90, dependencias: [4] },
-    ];
-    setNodos(mockData);
-    
-    // Seleccionar Grafito por defecto al cargar
-    setTecnicaSeleccionada(mockData[0]);
-  }, []);
+    if (!token) {
+      router.push('/login');
+      return;
+    }
+
+    const fetchArbolReal = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/arbol`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (res.ok) {
+          const backendData = await res.json(); // data ya es un array: [...]
+
+          // Fusionamos el progreso real del backend con nuestro diseño visual del frontend
+          const nodosFrontend = backendData.map((tecnicaBackend: any) => {
+            
+            // Diccionario de configuración visual para cada ID
+            let configVisual = {};
+            switch (tecnicaBackend.id_tecnica) {
+              case 1: configVisual = { descripcion: 'La técnica base por excelencia. Aprende a dominar los trazos, las sombras y los volúmenes usando lápices de diferentes durezas.', imagen_url: '/EjemploProyecto.png', posicion_x: 50, posicion_y: 10 }; break;
+              case 2: configVisual = { descripcion: 'Sombreado intenso y difuminados dramáticos. Ideal para retratos y alto contraste.', imagen_url: '/EjemploProyecto.png', posicion_x: 30, posicion_y: 35 }; break;
+              case 3: configVisual = { descripcion: 'Pintura basada en agua. Domina la transparencia, los lavados y el control de la humedad.', imagen_url: '/EjemploProyecto.png', posicion_x: 70, posicion_y: 35 }; break;
+              case 4: configVisual = { descripcion: 'Técnicas de impresión como linóleo o punta seca. Requiere precisión y paciencia.', imagen_url: '/EjemploProyecto.png', posicion_x: 30, posicion_y: 65 }; break;
+              case 5: configVisual = { descripcion: 'Pintura de secado lento y colores vibrantes. Perfecta para mezclas suaves y texturas.', imagen_url: '/EjemploProyecto.png', posicion_x: 60, posicion_y: 65 }; break;
+              case 6: configVisual = { descripcion: 'Pintura de secado rápido. Versátil y vibrante, ideal para múltiples capas.', imagen_url: '/EjemploProyecto.png', posicion_x: 80, posicion_y: 65 }; break;
+              case 7: configVisual = { descripcion: 'Modelado en 3D utilizando arcilla, yeso u otros materiales para dar vida a tus ideas.', imagen_url: '/EjemploProyecto.png', posicion_x: 30, posicion_y: 90 }; break;
+              default: configVisual = { descripcion: 'Técnica artística', imagen_url: '/EjemploProyecto.png', posicion_x: 50, posicion_y: 50 }; break;
+            }
+
+            // Traducimos las llaves del backend a nuestro tipo TecnicaNodo
+            return {
+              id: tecnicaBackend.id_tecnica,
+              nombre: tecnicaBackend.nombre,
+              desbloqueada: tecnicaBackend.desbloqueada,
+              completada: tecnicaBackend.completada,
+              // Si tiene un técnica padre, lo ponemos en el arreglo de dependencias
+              dependencias: tecnicaBackend.tecnica_padre_id ? [tecnicaBackend.tecnica_padre_id] : [],
+              ...configVisual
+            };
+          });
+
+          setNodos(nodosFrontend);
+          
+          // Seleccionamos la técnica raíz (Grafito) por defecto
+          const grafito = nodosFrontend.find((n: TecnicaNodo) => n.id === 1);
+          setTecnicaSeleccionada(grafito || nodosFrontend[0]);
+          
+        } else {
+          console.error('Error al obtener el árbol');
+        }
+      } catch (error) {
+        console.error('Error de red al conectar con el backend:', error);
+      } finally {
+        setCargando(false);
+      }
+    };
+
+    fetchArbolReal();
+  }, [token, router]);
+
+  // Pantalla de carga mientras esperamos al backend
+  if (cargando) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-black"></div>
+      </div>
+    );
+  }
 
   // Función para dibujar las líneas conectoras del SVG
   const renderizarLineas = () => {

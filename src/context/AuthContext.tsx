@@ -18,13 +18,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Recuperar sesión al cargar la página
   useEffect(() => {
-    const savedToken = localStorage.getItem('startist_token');
-    const savedUser = localStorage.getItem('startist_user');
-    if (savedToken && savedUser) {
+  const savedToken = localStorage.getItem('startist_token');
+  const savedUser = localStorage.getItem('startist_user');
+  
+  // Verificamos que existan y que no sean la cadena "undefined"
+  if (savedToken && savedUser && savedUser !== "undefined") {
+    try {
       setToken(savedToken);
       setUser(JSON.parse(savedUser));
+    } catch (e) {
+      console.error("Error al parsear el usuario:", e);
+      logout(); // Si el dato es inválido, limpiamos la sesión
     }
-  }, []);
+  }}, []);
 
   const login = (newToken: string, newUser: any) => {
     setToken(newToken);
