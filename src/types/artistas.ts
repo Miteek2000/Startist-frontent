@@ -1,10 +1,15 @@
+export interface TecnicaCompletada {
+  id_tecnica: number;
+  nombre: string;
+}
+
 export interface Artista {
   id_artista: string | number;
   nombre: string;
   descripcion: string;
   imagen?: string;
-  tecnicas?: string[];
   fecha_registro?: string;
+  tecnicas_completadas: TecnicaCompletada[];
 }
 
 export interface Proyecto {
