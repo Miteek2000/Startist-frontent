@@ -34,31 +34,23 @@ export function ArtistCard({ artist, proyectos = [] }: ArtistCardProps) {
       <div className="w-full">
         <div
           className="rounded-2xl px-4 py-3 flex flex-wrap gap-2 justify-start items-center"
-          style={{ backgroundColor: '#D1924F' }}
+          style={{ backgroundColor: '#D1924F', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.15)' }}
         >
           <span className="text-white text-ls font-semibold w-full text-left mb-2">PROYECTOS</span>
           {proyectos && proyectos.length > 0 ? (
             proyectos.map((proyecto, index) => (
               <span
                 key={index}
-                className="text-white text-xs px-3 py-1 rounded-full"
+                className="text-white text-sm px-3 py-1 rounded-full"
                 style={{ backgroundColor: 'rgba(255, 255, 255, 0.4)' }}
               >
                 {proyecto.tecnica_nombre}
               </span>
             ))
           ) : (
-            <>
-              <span className="text-white text-xs px-3 py-1 rounded-full" style={{ backgroundColor: 'rgba(255, 255, 255, 0.4)' }}>
-                Proyecto 1
-              </span>
-              <span className="text-white text-xs px-3 py-1 rounded-full" style={{ backgroundColor: 'rgba(255, 255, 255, 0.4)' }}>
-                Proyecto 2
-              </span>
-              <span className="text-white text-xs px-3 py-1 rounded-full" style={{ backgroundColor: 'rgba(255, 255, 255, 0.4)' }}>
-                Proyecto 3
-              </span>
-            </>
+            <span className="text-white text-sm px-3 py-1" style={{ opacity: 0.7 }}>
+              Este artista aún no cuenta con proyectos registrados
+            </span>
           )}
         </div>
       </div>
