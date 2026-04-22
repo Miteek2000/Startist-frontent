@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 interface AuthContextType {
   token: string | null;
   user: any | null;
+  cargandoAuth: boolean; 
   login: (token: string, user: any) => void;
   logout: () => void;
 }
@@ -14,23 +15,25 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<any | null>(null);
+  const [cargandoAuth, setCargandoAuth] = useState(true); 
   const router = useRouter();
 
-  // Recuperar sesión al cargar la página
   useEffect(() => {
-  const savedToken = localStorage.getItem('startist_token');
-  const savedUser = localStorage.getItem('startist_user');
-  
-  // Verificamos que existan y que no sean la cadena "undefined"
-  if (savedToken && savedUser && savedUser !== "undefined") {
-    try {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
-    } catch (e) {
-      console.error("Error al parsear el usuario:", e);
-      logout(); // Si el dato es inválido, limpiamos la sesión
+    const savedToken = localStorage.getItem('startist_token');
+    const savedUser  = localStorage.getItem('startist_user');
+
+    if (savedToken && savedUser && savedUser !== 'undefined') {
+      try {
+        setToken(savedToken);
+        setUser(JSON.parse(savedUser));
+      } catch (e) {
+        console.error('Error al parsear el usuario:', e);
+        localStorage.removeItem('startist_token');
+        localStorage.removeItem('startist_user');
+      }
     }
-  }}, []);
+    setCargandoAuth(false);
+  }, []);
 
   const login = (newToken: string, newUser: any) => {
     setToken(newToken);
@@ -49,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, login, logout }}>
+    <AuthContext.Provider value={{ token, user, cargandoAuth, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
