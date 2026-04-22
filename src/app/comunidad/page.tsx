@@ -1,9 +1,17 @@
 import { Header } from '@/components/ui/Header';
 import { ArtistCard } from '@/components/ui/ArtistCard';
-import { getArtistas } from '@/lib/artistas';
+import { getArtistas, getProyectosByArtista } from '@/lib/artistas';
 
 export default async function ComunidadPage() {
   const artistas = await getArtistas();
+
+  // Obtener proyectos para cada artista
+  const artistasConProyectos = await Promise.all(
+    artistas.map(async (artista) => ({
+      artista,
+      proyectos: await getProyectosByArtista(artista.id_artista),
+    }))
+  );
 
   return (
     <div style={{ backgroundColor: '#FEF7F3' }} className="min-h-screen">
@@ -13,8 +21,8 @@ export default async function ComunidadPage() {
 
         {artistas && artistas.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-            {artistas.map((artista) => (
-              <ArtistCard key={artista.id_artista} artist={artista} />
+            {artistasConProyectos.map(({ artista, proyectos }) => (
+              <ArtistCard key={artista.id_artista} artist={artista} proyectos={proyectos} />
             ))}
           </div>
         ) : (

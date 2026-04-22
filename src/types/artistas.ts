@@ -6,3 +6,16 @@ export interface Artista {
   tecnicas?: string[];
   fecha_registro?: string;
 }
+
+export interface Proyecto {
+  id_proyecto: string | number;
+  proyecto_titulo?: string;
+  archivo?: string;
+  proyecto_descripcion?: string;
+  tecnica_nombre?: string;
+  artista_id?: string | number;
+  artista_nombre?: string;
+  id_tarjeta?: string | number;
+  tarjeta_titulo?: string;
+  id_tecnica?: string | number;
+}

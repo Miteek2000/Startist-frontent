@@ -1,11 +1,12 @@
 import Image from 'next/image';
-import { Artista } from '@/types';
+import { Artista, Proyecto } from '@/types';
 
 interface ArtistCardProps {
   artist: Artista;
+  proyectos?: Proyecto[];
 }
 
-export function ArtistCard({ artist }: ArtistCardProps) {
+export function ArtistCard({ artist, proyectos = [] }: ArtistCardProps) {
   return (
     <div className="max-w-2xl bg-white rounded-3xl shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col" style={{ boxShadow: '-4px 4px 12px rgba(0, 0, 0, 0.1)' }}>
 
@@ -35,27 +36,27 @@ export function ArtistCard({ artist }: ArtistCardProps) {
           className="rounded-2xl px-4 py-3 flex flex-wrap gap-2 justify-start items-center"
           style={{ backgroundColor: '#D1924F' }}
         >
-          <span className="text-white text-ls font-semibold w-full text-left mb-2">TÉCNICAS</span>
-          {artist.tecnicas && artist.tecnicas.length > 0 ? (
-            artist.tecnicas.map((tecnica, index) => (
+          <span className="text-white text-ls font-semibold w-full text-left mb-2">PROYECTOS</span>
+          {proyectos && proyectos.length > 0 ? (
+            proyectos.map((proyecto, index) => (
               <span
                 key={index}
                 className="text-white text-xs px-3 py-1 rounded-full"
                 style={{ backgroundColor: 'rgba(255, 255, 255, 0.4)' }}
               >
-                {tecnica}
+                {proyecto.tecnica_nombre}
               </span>
             ))
           ) : (
             <>
               <span className="text-white text-xs px-3 py-1 rounded-full" style={{ backgroundColor: 'rgba(255, 255, 255, 0.4)' }}>
-                Grafito
+                Proyecto 1
               </span>
               <span className="text-white text-xs px-3 py-1 rounded-full" style={{ backgroundColor: 'rgba(255, 255, 255, 0.4)' }}>
-                Acuarela
+                Proyecto 2
               </span>
               <span className="text-white text-xs px-3 py-1 rounded-full" style={{ backgroundColor: 'rgba(255, 255, 255, 0.4)' }}>
-                Acuarela
+                Proyecto 3
               </span>
             </>
           )}
